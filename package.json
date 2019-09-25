@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "fs": "^0.0.1-security",
+    "shadow-cljs": "^2.8.52",
+    "source-map": "0.7.3"
+  }
+}

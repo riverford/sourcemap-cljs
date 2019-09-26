@@ -11,10 +11,9 @@
 
 (defn main
   [& args]
-  (let [[lcs p1 p2 & [all?]] args
+  (let [[lcs p1 p2 & [source-filter]] args
         m1 (parse-file p1)
-        m2 (parse-file p2)
-        all? (some? all?)]
+        m2 (parse-file p2)]
     (-> (reduce (fn [p lc]
                   (-> p
                       (.then (fn []
@@ -30,18 +29,18 @@
                                                                                    :column c})
                                            line (.-line pos)
                                            column (.-column pos)]
-                                       (.catch (.with
-                                                 SourceMapConsumer
-                                                 m2
-                                                 nil
-                                                 (fn [consumer]
-                                                   (let [pos2 (.originalPositionFor consumer #js {:line (inc line)
-                                                                                                  :column column})
-                                                         ret (js->clj pos2 :keywordize-keys true)]
-                                                     (when (or all? (.startsWith (:source ret) "riverford"))
-                                                       (println lc)
-                                                       (println ret)))))
-                                               (fn []))))))
+                                       (.with
+                                         SourceMapConsumer
+                                         m2
+                                         nil
+                                         (fn [consumer]
+                                           (let [pos2 (.originalPositionFor consumer #js {:line (inc line)
+                                                                                          :column column})
+                                                 ret (js->clj pos2 :keywordize-keys true)]
+                                             (when (or (nil? source-filter)
+                                                       (not (neg? (.indexOf (:source ret) source-filter))))
+                                               (println lc)
+                                               (println ret)))))))))
                                ))))
                 (.resolve js/Promise)
                 (string/split lcs #","))

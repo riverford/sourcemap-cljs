@@ -9,11 +9,29 @@
   [path]
   (.parse js/JSON (.readFileSync fs path)))
 
+(defn parse-args
+  [args]
+  (into {}
+        (for [[k v] (partition 2 args)
+              :let [[_ k] (re-matches #"\-\-(.*)" k)]
+              :when k]
+          [k v])))
+
+(defn extract-locations
+  [path]
+  (let [f (.readFileSync fs path "utf8")]
+    (re-seq #"\d+:\d+" f)))
+
 (defn main
   [& args]
-  (let [[lcs p1 p2 & [source-filter]] args
-        m1 (parse-file p1)
-        m2 (parse-file p2)]
+  (let [{:strs [match locations stacktrace js cljs] :as args} (parse-args args)
+        _ (println args)
+        _ (assert (and js cljs (or locations stacktrace)))
+        lcs (if stacktrace
+              (extract-locations stacktrace)
+              (string/split locations #","))
+        js-map (parse-file js)
+        cljs-map (parse-file cljs)]
     (-> (reduce (fn [p lc]
                   (-> p
                       (.then (fn []
@@ -22,7 +40,7 @@
                                      c (js/parseInt c)]
                                  (.with
                                    SourceMapConsumer
-                                   m1
+                                   js-map
                                    nil
                                    (fn [consumer]
                                      (let [pos (.originalPositionFor consumer #js {:line l
@@ -31,18 +49,19 @@
                                            column (.-column pos)]
                                        (.with
                                          SourceMapConsumer
-                                         m2
+                                         cljs-map
                                          nil
                                          (fn [consumer]
                                            (let [pos2 (.originalPositionFor consumer #js {:line (inc line)
                                                                                           :column column})
                                                  ret (js->clj pos2 :keywordize-keys true)]
-                                             (when (or (nil? source-filter)
-                                                       (not (neg? (.indexOf (:source ret) source-filter))))
+                                             (when (or (nil? match)
+                                                       (not (neg? (.indexOf (:source ret) match))))
                                                (println lc)
                                                (println ret)))))))))
                                ))))
                 (.resolve js/Promise)
-                (string/split lcs #","))
-        (.catch (fn []
-                  (println "An error occurred"))))))
+                lcs)
+        (.catch (fn [err]
+                  (println "An error occurred:")
+                  (println err))))))

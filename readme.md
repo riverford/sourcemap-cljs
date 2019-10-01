@@ -1,7 +1,14 @@
 # Instructions
 
+## Dev
+
 `shadow-cljs watch script`
 
+## Prod
+
+`shadow-cljs release script`
+
+## Running (dev/prod)
 `node sourcemap.js <options>`
 
 # Options

@@ -3,4 +3,5 @@
  {:script
   {:target :node-script
    :main sourcemap-cljs.core/main
+   :compiler-options {:infer-externs :auto}
    :output-to "sourcemap.js"}}}

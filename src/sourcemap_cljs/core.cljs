@@ -7,7 +7,7 @@
 
 (defn parse-file
   [path]
-  (.parse js/JSON (.readFileSync fs path)))
+  (.parse js/JSON (.readFileSync ^js fs path)))
 
 (defn parse-args
   [args]
@@ -43,17 +43,16 @@
                                    js-map
                                    nil
                                    (fn [consumer]
-                                     (let [pos (.originalPositionFor consumer #js {:line l
+                                     (let [pos ^js (.originalPositionFor ^js consumer #js {:line l
                                                                                    :column c})
-                                           line (.-line pos)
-                                           column (.-column pos)]
+                                           {:keys [line column]} (js->clj pos :keywordize-keys true)]
                                        (.with
                                          SourceMapConsumer
                                          cljs-map
                                          nil
                                          (fn [consumer]
-                                           (let [pos2 (.originalPositionFor consumer #js {:line (inc line)
-                                                                                          :column column})
+                                           (let [pos2 (.originalPositionFor ^js consumer #js {:line (inc line)
+                                                                                              :column column})
                                                  ret (js->clj pos2 :keywordize-keys true)]
                                              (when (or (nil? match)
                                                        (not (neg? (.indexOf (:source ret) match))))

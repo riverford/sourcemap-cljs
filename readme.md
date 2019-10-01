@@ -16,7 +16,7 @@
   * `--stacktrace` stacktrace copied from sentry <path/to/stacktrace.txt>
   * `--match` filter only sources containing text e.g. some-ns
 
-### Typical process
+# Typical process
 
 1. Download artifacts from sentry
 2. Copy stacktrace to clipboard

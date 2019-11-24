@@ -29,7 +29,7 @@ You can get `main.ios.map` from e.g. expo's post publish hook (see using expo wi
 1. Download main.ios.map and index.js.map from e.g. sentry
 2. Run `node sourcemap.js --js ~/Downloads/main.ios.map --cljs ~/Downloads/index.js.map --locations 11:90000`
 
-# Typical process (with stacktracte)
+# Typical process (with stacktrace)
 
 Follow step 1 as above, but then copy the stacktrace string into a file.
 Stacktrace will be parsed for <line>:<column> pairs.

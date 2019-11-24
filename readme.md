@@ -45,7 +45,7 @@ app:///main.ios.bundle in vw at line 11:149747
 
 ```
 1. `pbpaste > stacktrace.txt`
-2. `node sourcemap.js --js ~/Downloads/main.ios.map --cljs ~/Downloads/index.js.map --stacktrace stacktrace.tx
+2. `node sourcemap.js --js ~/Downloads/main.ios.map --cljs ~/Downloads/index.js.map --stacktrace stacktrace.txt`
 
 Which should give an output like the following - which is not pretty, but hopefully enough to avoid despair:
 

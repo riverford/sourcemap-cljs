@@ -24,7 +24,7 @@ This is a very specific tool designed to take two source maps and map a position
 Where `main.ios.map` is the sourcemap that maps from the final bundled js to the advanced compiled js,
 and `index.js.map` is the sourcemap that maps from the advanced compiled js to the original cljs.
 
-You can get `main.ios.map` from e.g. expo's post publish hook (see under using expo with sentry), and `index.js.map` will be output by shadow-cljs into the target directory alongside index.js, so long as `:compiler-options {:sourcemap true}` is set in `shadow-cljs.edn`.
+You can get `main.ios.map` from e.g. expo's post publish hook (see using expo with sentry in the expo docs), and `index.js.map` will be output by shadow-cljs into the target directory alongside index.js, so long as `:compiler-options {:sourcemap true}` is set in `shadow-cljs.edn`.
 
 1. Download main.ios.map and index.js.map from e.g. sentry
 2. Run `node sourcemap.js --js ~/Downloads/main.ios.map --cljs ~/Downloads/index.js.map --locations 11:90000`

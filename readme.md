@@ -32,7 +32,7 @@ You can get `main.ios.map` from e.g. expo's post publish hook (see using expo wi
 # Typical process (with stacktrace)
 
 Follow step 1 as above, but then copy the stacktrace string into a file.
-Stacktrace will be parsed for <line>:<column> pairs.
+Stacktrace will be parsed for `<line>:<column>` pairs.
 
 ```
 app:///main.ios.bundle at line 11:935705
